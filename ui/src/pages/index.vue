@@ -29,11 +29,13 @@
         <br />
         <u-button
             type="info"
-            @click="redirect('/pages/systemconfig/wificonfig')"
+            @click="redirect('/pages/wificonfig')"
             >Wifi设置</u-button
         >
         <br />
-        <u-button type="info">文件管理</u-button>
+        <u-button type="info" @click="redirect('/pages/filelist')"
+            >文件管理</u-button
+        >
         <br />
         <u-input
             border="border"
