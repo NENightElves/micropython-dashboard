@@ -49,6 +49,14 @@ def testPOST(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._respons
     httpResponse.WriteResponseJSONOk({'status': 'ok'})
 
 
+@MicroWebSrv.route('/api/reboot', method='POST')
+@require_authorization
+def reboot(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._response):
+    httpResponse.WriteResponseJSONOk({'status': 'ok'})
+    utime.sleep(1)
+    machine.reset()
+
+
 @MicroWebSrv.route('/api/systemconfig/syspwd', method='POST')
 @require_authorization
 def setsyspwd(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._response):

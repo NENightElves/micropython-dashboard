@@ -27,9 +27,7 @@
             <u-button @click="change_server_password()">修改请求密钥</u-button>
         </view>
         <br />
-        <u-button
-            type="info"
-            @click="redirect('/pages/wificonfig')"
+        <u-button type="info" @click="redirect('/pages/wificonfig')"
             >Wifi设置</u-button
         >
         <br />
@@ -37,11 +35,7 @@
             >文件管理</u-button
         >
         <br />
-        <u-input
-            border="border"
-            type="textarea"
-            style="display: flex"
-        ></u-input>
+        <u-button type="warning" @click="query_reboot()">重启</u-button>
     </view>
 </template>
 
@@ -115,6 +109,17 @@ export default {
                 .catch((err) => {
                     console.log(err);
                     alert("修改失败！");
+                });
+        },
+        query_reboot: function () {
+            this.$axios
+                .post("/api/reboot")
+                .then((res) => {
+                    if (res.data["status"] == "ok") alert("重启成功！");
+                    else alert("重启失败！err：" + res.data["status"]);
+                })
+                .catch((err) => {
+                    console.log(err);
                 });
         },
         redirect: function (url) {
