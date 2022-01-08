@@ -50,7 +50,8 @@
                 placeholder="文件名"
                 v-model="create_file_name"
             ></u-input>
-            <u-button @click="createfile()">创建文件</u-button>
+            <u-button @click="createfile('f')">创建文件</u-button>
+            <u-button @click="createfile('d')">创建文件夹</u-button>
         </view>
     </view>
 </template>
@@ -104,11 +105,11 @@ export default {
                 url: url,
             });
         },
-        createfile: function () {
+        createfile: function (type) {
             if (this.create_file_name != "")
                 this.$axios
                     .post("/api/files/create", {
-                        files: [this.create_file_name],
+                        files: [{ name: this.create_file_name, type: type }],
                     })
                     .then((res) => {
                         if (res.data["status"] == "ok") {

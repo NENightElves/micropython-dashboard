@@ -133,8 +133,11 @@ def createfile(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._respo
     j = httpClient.ReadRequestContentAsJSON()
     r = []
     for _ in j['files']:
-        f = open(_, 'w')
-        f.close()
+        if _['type'] == 'd':
+            os.mkdir(_['name'])
+        elif _['type'] == 'f':
+            f = open(_['name'], 'w')
+            f.close()
     httpResponse.WriteResponseJSONOk({'status': 'ok'})
 
 
