@@ -8,4 +8,8 @@ server.start()
 
 print('initialization completed! do loop...')
 while True:
-    loop.loop()
+    try:
+        loop.loop()
+    except Exception as e:
+        print(e)
+        pass
