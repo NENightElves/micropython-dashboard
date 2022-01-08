@@ -17,8 +17,8 @@ programs:
 server:
 	for i in $(server); do ampy -p $(PORT) put $$i; done
 
-web:
-	for i in $(web); do ampy -p $(PORT) put $$i; done
-
 config:
 	for i in $(config); do ampy -p $(PORT) put $$i; done
+
+web:
+	for i in $(web); do ampy -p $(PORT) put $$i; done
