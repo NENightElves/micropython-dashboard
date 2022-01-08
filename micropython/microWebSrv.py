@@ -370,6 +370,8 @@ class MicroWebSrv:
                                             response.WriteResponseForbidden()
                                 else:
                                     response.WriteResponseNotFound()
+                            elif self._method.upper() == "OPTIONS":
+                                response.WriteResponseOk()
                             else:
                                 response.WriteResponseMethodNotAllowed()
                         elif upg == 'websocket' and 'MicroWebSocket' in globals() \
@@ -548,6 +550,11 @@ class MicroWebSrv:
 
         def __init__(self, client):
             self._client = client
+            self._additionalHeaders = {}
+            self._additionalHeaders['Access-Control-Allow-Origin'] = '*'
+            self._additionalHeaders['Access-Control-Allow-Headers']='*'
+            self._additionalHeaders['Access-Control-Allow-Method']='*'
+
 
         # ------------------------------------------------------------------------
 
@@ -593,6 +600,8 @@ class MicroWebSrv:
         # ------------------------------------------------------------------------
 
         def _writeEndHeader(self):
+            for _ in self._additionalHeaders:
+                self._writeHeader(_, self._additionalHeaders[_])
             return self._write("\r\n")
 
         # ------------------------------------------------------------------------
