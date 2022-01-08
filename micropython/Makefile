@@ -1,24 +1,47 @@
-libs = microWebSrv.py microWebSocket.py microWebSrv.py
-programs = main.py WifiConnector.py loop.py
-server = server.py
+slibs = microWebSrv.py microWebSocket.py microWebTemplate.py
+libs = microWebSrv.mpy microWebSocket.mpy microWebTemplate.mpy
+sprograms = main.py WifiConnector.py loop.py
+programs = main.mpy WifiConnector.mpy loop.mpy
+sserver = server.py
+server = server.mpy
 web = www
 config= wifi_config.json server_config.json
 PORT = /dev/ttyUSB0
 
 
-all: libs programs server web config
+all: compile_all libs programs server web config
 
-libs:
+libs: $(libs)
 	for i in $(libs); do ampy -p $(PORT) put $$i; done
 
-programs:
+programs: $(programs)
 	for i in $(programs); do ampy -p $(PORT) put $$i; done
 
-server:
+server: $(server)
 	for i in $(server); do ampy -p $(PORT) put $$i; done
 
-config:
+config: $(config)
 	for i in $(config); do ampy -p $(PORT) put $$i; done
 
-web:
+web: $(web)
 	for i in $(web); do ampy -p $(PORT) put $$i; done
+
+compile_all: compile_libs compile_programs compile_server
+
+compile_libs: $(libs)
+
+compile_programs: $(programs)
+
+compile_server: $(server)
+
+$(libs): $(slibs)
+	for i in $(slibs); do mpy-cross -O3 $$i; done
+
+$(programs): $(sprograms)
+	for i in $(sprograms); do mpy-cross -O3 $$i; done
+
+$(server): $(sserver)
+	for i in $(sserver); do mpy-cross -O3 $$i; done
+
+clean:
+	rm $(libs) $(programs) $(server)

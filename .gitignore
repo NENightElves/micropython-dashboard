@@ -1,3 +1,4 @@
 .vscode
 wifi_config.json
 server_config.json
+*.mpy
