@@ -20,6 +20,12 @@
 			// "style": {
 			// 	"navigationBarTitleText": "uni-app"
 			// }
+		},
+		{
+			"path": "pages/file"
+			// "style": {
+			// 	"navigationBarTitleText": "uni-app"
+			// }
 		}
 	],
 	"globalStyle": {
