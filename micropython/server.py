@@ -2,6 +2,7 @@ import json
 from microWebSrv import MicroWebSrv
 import machine
 import utime
+import os
 
 AUTHORIZATION = None
 
@@ -17,6 +18,15 @@ def require_authorization(func):
         else:
             return func(*args, **kwargs)
     return wrapper
+
+
+def _deletefile(path):
+    try:
+        os.remove(path)
+    except OSError:
+        for _ in os.listdir(path):
+            _deletefile(_)
+        os.remove(path)
 
 
 @MicroWebSrv.route('/hello', method='GET')
@@ -96,9 +106,63 @@ def changewifi(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._respo
     machine.reset()
 
 
+@MicroWebSrv.route('/api/files/list', method='POST')
+@require_authorization
+def getfilelist(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._response):
+    j = httpClient.ReadRequestContentAsJSON()
+    r = []
+    for _ in os.ilistdir(j['dir']):
+        if _[1] == 32768:
+            r.append({'name': _[0], 'type': 'f'})
+        elif _[1] == 16384:
+            r.append({'name': _[0], 'type': 'd'})
+    httpResponse.WriteResponseJSONOk({'files': r, 'status': 'ok'})
+
+
+@MicroWebSrv.route('/api/files/create', method='POST')
+@require_authorization
+def createfile(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._response):
+    j = httpClient.ReadRequestContentAsJSON()
+    r = []
+    for _ in j['files']:
+        f = open(_, 'w')
+        f.close()
+    httpResponse.WriteResponseJSONOk({'status': 'ok'})
+
+
+@MicroWebSrv.route('/api/files/delete', method='POST')
+@require_authorization
+def deletefile(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._response):
+    j = httpClient.ReadRequestContentAsJSON()
+    r = []
+    for _ in j['files']:
+        _deletefile(_)
+    httpResponse.WriteResponseJSONOk({'status': 'ok'})
+
+
+@MicroWebSrv.route('/api/files/get', method='POST')
+@require_authorization
+def getfile(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._response):
+    j = httpClient.ReadRequestContentAsJSON()
+    content = None
+    with open(j['file'], 'r') as f:
+        content = f.read()
+    httpResponse.WriteResponseJSONOk({'content': content, 'status': 'ok'})
+
+
+@MicroWebSrv.route('/api/files/modify', method='POST')
+@require_authorization
+def modifyfile(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._response):
+    j = httpClient.ReadRequestContentAsJSON()
+    content = None
+    with open(j['file'], 'w') as f:
+        f.write(j['content'])
+    httpResponse.WriteResponseJSONOk({'status': 'ok'})
+
+
 def start():
     global AUTHORIZATION
     with open('server_config.json') as f:
         AUTHORIZATION = json.loads(f.read())['Authorization']
-    srv = MicroWebSrv(webPath='www')
+    srv = MicroWebSrv(webPath='/www')
     srv.Start(threaded=True)
