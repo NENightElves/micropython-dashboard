@@ -1,7 +1,12 @@
 <template>
     <view>
         <br />
-        <u-input border="border" type="textarea" v-model="content"></u-input>
+        <u-input
+            border="border"
+            type="textarea"
+            v-model="content"
+            maxlength="-1"
+        ></u-input>
         <u-button type="primary" @click="submit()">提交</u-button>
     </view>
 </template>
