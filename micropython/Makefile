@@ -1,10 +1,10 @@
 slibs = microWebSrv.py microWebSocket.py microWebTemplate.py
 libs = microWebSrv.mpy microWebSocket.mpy microWebTemplate.mpy
-sprograms = WifiConnector.py loop.py
-programs = WifiConnector.mpy loop.mpy
+sprograms = WifiConnector.py
+programs = WifiConnector.mpy
 sserver = server.py
 server = server.mpy
-main = main.py
+main = main.py loop.py
 web = www
 config= wifi_config.json server_config.json
 PORT = /dev/ttyUSB0
@@ -13,7 +13,7 @@ PORT = /dev/ttyUSB0
 all: compile_all main libs programs server web config
 
 main: $(main)
-	ampy -p $(PORT) put $(main)
+	for i in $(main); do ampy -p $(PORT) put $$i; done
 
 libs: $(libs)
 	for i in $(libs); do ampy -p $(PORT) put $$i; done
