@@ -106,10 +106,13 @@ export default {
             });
         },
         createfile: function (type) {
-            if (this.create_file_name != "")
+            if (this.create_file_name != "") {
+                let cfn = "";
+                if (this.dir == "/") cfn = this.dir + this.create_file_name;
+                else cfn = this.dir + "/" + this.create_file_name;
                 this.$axios
                     .post("/api/files/create", {
-                        files: [{ name: this.create_file_name, type: type }],
+                        files: [{ name: cfn, type: type }],
                     })
                     .then((res) => {
                         if (res.data["status"] == "ok") {
@@ -128,6 +131,7 @@ export default {
                     .catch((err) => {
                         console.log(err);
                     });
+            }
         },
         deletefile: function (filenames) {
             for (let i = 0; i < filenames.length; i++)

@@ -21,11 +21,14 @@ def require_authorization(func):
 
 
 def _deletefile(path):
-    try:
+    if os.stat(path)[0] == 32768:
         os.remove(path)
-    except OSError:
+    elif os.stat(path)[0] == 16384:
         for _ in os.listdir(path):
-            _deletefile(_)
+            if path == '/':
+                _deletefile(path+_)
+            else:
+                _deletefile(path+'/'+_)
         os.remove(path)
 
 
@@ -145,7 +148,6 @@ def createfile(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._respo
 @require_authorization
 def deletefile(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._response):
     j = httpClient.ReadRequestContentAsJSON()
-    r = []
     for _ in j['files']:
         _deletefile(_)
     httpResponse.WriteResponseJSONOk({'status': 'ok'})
@@ -165,7 +167,6 @@ def getfile(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._response
 @require_authorization
 def modifyfile(httpClient: MicroWebSrv._client, httpResponse: MicroWebSrv._response):
     j = httpClient.ReadRequestContentAsJSON()
-    content = None
     with open(j['file'], 'w') as f:
         f.write(j['content'])
     httpResponse.WriteResponseJSONOk({'status': 'ok'})
