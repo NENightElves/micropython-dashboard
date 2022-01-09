@@ -361,8 +361,9 @@ class MicroWebSrv:
                                                    'if-modified-since' in self._headers:
                                                     response.WriteResponseNotModified()
                                                 else:
-                                                    headers = {'Last-Modified': 'Fri, 1 Jan 2018 23:42:00 GMT',
-                                                               'Cache-Control': 'max-age=315360000'}
+                                                    # headers = {'Last-Modified': 'Fri, 1 Jan 2018 23:42:00 GMT',
+                                                    #            'Cache-Control': 'max-age=315360000'}
+                                                    headers = {'Cache-Control': 'no-cache'}
                                                     response.WriteResponseFile(filepath, contentType, headers)
                                             else:
                                                 response.WriteResponseFile(filepath, contentType)
@@ -552,9 +553,8 @@ class MicroWebSrv:
             self._client = client
             self._additionalHeaders = {}
             self._additionalHeaders['Access-Control-Allow-Origin'] = '*'
-            self._additionalHeaders['Access-Control-Allow-Headers']='*'
-            self._additionalHeaders['Access-Control-Allow-Method']='*'
-
+            self._additionalHeaders['Access-Control-Allow-Headers'] = '*'
+            self._additionalHeaders['Access-Control-Allow-Method'] = '*'
 
         # ------------------------------------------------------------------------
 
