@@ -5,9 +5,12 @@ import utime
 
 def connect(filename):
     config = None
-    with open(filename, 'r') as f:
-        config = json.loads(f.read())
-    if not config:
+    try:
+        with open(filename, 'r') as f:
+            config = json.loads(f.read())
+    except OSError:
+        pass
+    if not config or 'essid' not in config or 'password' not in config:
         print('connection failed!')
         start_ap()
         return

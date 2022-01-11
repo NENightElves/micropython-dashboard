@@ -1,10 +1,10 @@
-import WifiConnector
-import server
-import sys
 import utime
-
+import sys
+import WifiConnector
 WifiConnector.connect("wifi_config.json")
 
+
+import server
 server.start()
 
 
