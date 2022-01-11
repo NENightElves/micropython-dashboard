@@ -10,7 +10,7 @@ config= wifi_config.json server_config.json
 PORT = /dev/ttyUSB0
 
 
-all: compile_all main libs programs server web config
+all: compile_all main libs programs server config web
 
 main: $(main)
 	for i in $(main); do ampy -p $(PORT) put $$i; done
