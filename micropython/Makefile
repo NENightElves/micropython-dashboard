@@ -4,8 +4,9 @@ sprograms = WifiConnector.py
 programs = WifiConnector.mpy
 sserver = server.py
 server = server.mpy
-main = main.py loop.py
+main = main.py
 web = www
+uprogram = loop.py
 config= wifi_config.json server_config.json
 PORT = /dev/ttyUSB0
 
@@ -14,6 +15,9 @@ all: compile_all main libs programs server config web
 
 main: $(main)
 	for i in $(main); do ampy -p $(PORT) put $$i; done
+
+uprogram: $(uprogram)
+	for i in $(uprogram); do ampy -p $(PORT) put $$i; done
 
 libs: $(libs)
 	for i in $(libs); do ampy -p $(PORT) put $$i; done
