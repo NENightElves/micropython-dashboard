@@ -18,7 +18,7 @@ def connect(filename):
     wlan.active(True)
     if not wlan.isconnected():
         print('connecting to network...')
-        if config['static']:
+        if 'static' in config and config['static']:
             wlan.ifconfig((config['static']['ip'], config['static']['subnet'], config['static']['gateway'], config['static']['dns']))
         wlan.connect(config['essid'], config['password'])
         i = 0
